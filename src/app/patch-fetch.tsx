@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 /**
  * This is a hacky `fetch()` patch that fixes Vercel's broken rewrites feature
  * when a request contains the `Next-Router-Prefetch` header
@@ -38,4 +40,11 @@ function patchFetch(originalFetch: typeof window.fetch): typeof window.fetch {
   }
 }
 
-window.fetch = patchFetch(window.fetch);
+// I hate so much about the things that you choose to be, Next.js
+export const PatchFetchAsClientComponentBecauseOtherwiseItWillNotBeIncludedInServerComponentRoutesAndAddingAScriptTagInsteadIsMehAndWillNotPolyfill = () => {
+  useEffect(() => {
+    window.fetch = patchFetch(window.fetch);
+  }, []);
+
+  return null;
+}
